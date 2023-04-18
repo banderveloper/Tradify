@@ -1,4 +1,4 @@
-﻿using Hub.IdentityService.Domain.Enums;
+﻿using Tradify.Identity.Domain.Enums;
 
 namespace Tradify.Identity.Domain.Entities
 {
@@ -6,19 +6,13 @@ namespace Tradify.Identity.Domain.Entities
     public class User : BaseEntity
     {
         public string UserName { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        public string Password { get; set; }
         
-        public UserRole Role { get; set; }
+        public string Email { get; set; }
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string? Patronymic { get; set; }
-        public DateOnly? DateOfBirth { get; set; }
+        public Role Role { get; set; }
 
-
-        //TODO: add avatar
-        public bool EmailConfirmed { get; set; } = false;
-        public bool PhoneNumberConfirmed { get; set; } = false;
+        
+        public bool IsEmailConfirmed { get; set; } = false;
     }
 }

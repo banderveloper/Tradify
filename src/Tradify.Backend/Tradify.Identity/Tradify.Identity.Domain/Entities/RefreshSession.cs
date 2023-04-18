@@ -7,6 +7,7 @@ namespace Tradify.Identity.Domain.Entities
         public int UserId { get; set; }
         public Guid RefreshToken { get; set; }
 
-        [JsonIgnore] public User? User { get; set; }
+        [JsonIgnore] 
+        public User? User { get; set; }
     }
 }

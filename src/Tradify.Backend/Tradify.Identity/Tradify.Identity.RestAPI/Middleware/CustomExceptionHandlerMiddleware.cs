@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace Hub.IdentityService.WebApi.Middleware
+namespace Tradify.Identity.RestApi.Middleware
 {
     public class CustomExceptionHandlerMiddleware : IMiddleware
     {
