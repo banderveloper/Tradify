@@ -10,4 +10,15 @@
       <ProjectReference Include="..\Tradify.Identity.Domain\Tradify.Identity.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Login\" />
+      <Folder Include="Features\User\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="MediatR" Version="12.0.1" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.2" />
+    </ItemGroup>
+
 </Project>
