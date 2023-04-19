@@ -1,11 +1,12 @@
 ﻿using System.Net;
+using System.Text.Json.Serialization;
 using Tradify.Identity.Application.Errors.Common;
 
 namespace Tradify.Identity.Application.Errors;
 
 public abstract class Error
 {
-    public HttpStatusCode StatusCode { get; init; }
+    [JsonIgnore] public HttpStatusCode StatusCode { get; init; }
     public string Message { get; set; }
     
     public ErrorCode ErrorCode { get; set; }
