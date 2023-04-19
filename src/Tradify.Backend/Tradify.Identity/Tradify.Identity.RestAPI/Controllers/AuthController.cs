@@ -4,7 +4,7 @@ using Tradify.Identity.RestAPI.Models;
 namespace Tradify.Identity.RestAPI.Controllers;
 
 
-[Microsoft.AspNetCore.Components.Route("auth")]
+[Route("auth")]
 public class AuthController : ApiControllerBase
 {
     [HttpGet("login")]

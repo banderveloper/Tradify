@@ -12,6 +12,8 @@
 
     <ItemGroup>
       <Folder Include="Features\Auth\" />
+      <Folder Include="Features\Common\Commands\" />
+      <Folder Include="Features\Common\Queries\" />
       <Folder Include="Features\User\" />
     </ItemGroup>
 
