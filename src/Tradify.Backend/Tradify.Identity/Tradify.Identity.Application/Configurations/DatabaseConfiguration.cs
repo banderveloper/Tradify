@@ -1,6 +1,6 @@
-﻿namespace Tradify.Identity.Application.Options
+﻿namespace Tradify.Identity.Application.Configurations
 {
-    public class DatabaseOptions
+    public class DatabaseConfiguration
     {
         public string ConnectionString { get; set; }
         public string User { get; set; }

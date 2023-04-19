@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tradify.Identity.Application.Interfaces;
-using Tradify.Identity.Application.Options;
+using Tradify.Identity.Application.Configurations;
 
 namespace Tradify.Identity.Persistence
 {
@@ -11,7 +11,7 @@ namespace Tradify.Identity.Persistence
         {
             // Get service configuration from services
             var scope = services.BuildServiceProvider().CreateScope();
-            var dbConfig = scope.ServiceProvider.GetRequiredService<DatabaseOptions>();
+            var dbConfig = scope.ServiceProvider.GetRequiredService<DatabaseConfiguration>();
 
             // register db context
             services.AddDbContext<ApplicationDbContext>(options =>

@@ -7,6 +7,8 @@ namespace Tradify.Identity.Application.Interfaces
     {
         DbSet<User> Users { get; set; }
         DbSet<RefreshSession> RefreshSessions { get; set; }
+        DbSet<UserData> UserDatas { get; set; }
+        
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System.Net;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Tradify.Identity.Application.Errors;
+using Tradify.Identity.Application.Mappings;
+using Tradify.Identity.Application.Responses;
+using Tradify.Identity.Application.Responses.Errors;
 
 namespace Tradify.Identity.RestAPI.Results;
 
-public class Result<TEntity> : ActionResult
-    where TEntity : class
+public class ApiResult<TEntity> : ActionResult, IMappable
 {
     public TEntity? Data { get; set; }
     public Error? Error { get; set; }
@@ -18,5 +20,10 @@ public class Result<TEntity> : ActionResult
         response.StatusCode = Error == null ? (int)HttpStatusCode.OK : (int)Error.StatusCode;
 
         await response.WriteAsJsonAsync(this);
+    }
+
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<Result<TEntity>, ApiResult<TEntity>>();
     }
 }

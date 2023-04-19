@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json.Serialization;
-using Tradify.Identity.Application.Errors.Common;
+using Tradify.Identity.Application.Responses.Errors.Common;
 
-namespace Tradify.Identity.Application.Errors;
+namespace Tradify.Identity.Application.Responses.Errors;
 
 public abstract class Error
 {
