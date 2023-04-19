@@ -30,7 +30,7 @@ namespace Tradify.Identity.Persistence
 
             // bind db context interface to class
             services.AddScoped<IApplicationDbContext>(provider =>
-                provider.GetService<ApplicationDbContext>()!);
+                provider.GetRequiredService<ApplicationDbContext>());
 
             return services;
         }
