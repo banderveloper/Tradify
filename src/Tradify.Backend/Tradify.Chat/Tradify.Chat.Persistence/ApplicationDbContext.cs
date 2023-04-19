@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ChatUser>().HasNoKey();
         base.OnModelCreating(modelBuilder);
     }
 }
