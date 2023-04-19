@@ -9,6 +9,7 @@ namespace Tradify.Identity.Persistence
     {
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshSession> RefreshSessions { get; set; }
+        public DbSet<UserData> UserDatas { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 

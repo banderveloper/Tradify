@@ -1,6 +1,6 @@
 ﻿namespace Tradify.Identity.Domain.Enums
 {
-    public enum Role
+    public enum UserRole
     {
         User = 1,
         Support = 2,

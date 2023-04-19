@@ -11,6 +11,8 @@ namespace Tradify.Identity.Persistence.EntityTypeConfigurations
             builder.HasKey(x => x.Id);
             builder.HasIndex(x => x.UserName).IsUnique();
             builder.HasIndex(x => x.Email).IsUnique();
+            builder.HasOne(x => x.UserData)
+                .WithOne(x => x.User);
         }
     }
 }
