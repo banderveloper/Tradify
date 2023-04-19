@@ -10,7 +10,7 @@ namespace Tradify.Identity.Domain.Entities
         
         public string Email { get; set; }
 
-        public UserRole UserRole { get; set; }
+        public UserRole Role { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
         
