@@ -1,6 +1,20 @@
-﻿namespace Tradify.Identity.RestAPI.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using Tradify.Identity.RestAPI.Models;
 
+namespace Tradify.Identity.RestAPI.Controllers;
+
+
+[Microsoft.AspNetCore.Components.Route("auth")]
 public class AuthController : ApiControllerBase
 {
-    
+    [HttpGet("login")]
+    public async Task<ActionResult> Login(LoginRequestModel requestModel, CancellationToken cancellationToken)
+    {
+        //TODO: validation
+
+
+        var result = await Mediator.Send(requestModel, cancellationToken);
+
+        return result;
+    }
 }

@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\Login\" />
+      <Folder Include="Features\Auth\" />
       <Folder Include="Features\User\" />
     </ItemGroup>
 
