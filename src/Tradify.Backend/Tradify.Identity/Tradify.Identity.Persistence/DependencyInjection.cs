@@ -20,8 +20,9 @@ namespace Tradify.Identity.Persistence
 
                 //Console.WriteLine("Filled conn string: " + filledConnectionString);
 
-                //options.UseSqlite(connectionConfiguration!.Sqlite);
-                options.UseNpgsql(filledConnectionString);
+                //TODO: after development, delete Sqlite NuGet
+                options.UseSqlite("Data Source=Identity.db;");
+                //options.UseNpgsql(filledConnectionString);
 
                 // for optimizing read-only queries, disabling caching of entities
                 // in ef select queries before update should be added .AsTracking method  
