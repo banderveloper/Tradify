@@ -4,9 +4,10 @@ using Tradify.Identity.Application.Errors;
 
 namespace Tradify.Identity.RestAPI.Results;
 
-public class Result : ActionResult
+public class Result<TEntity> : ActionResult
+    where TEntity : class
 {
-    public object? Data { get; set; }
+    public TEntity? Data { get; set; }
     public Error? Error { get; set; }
     
     public override async Task ExecuteResultAsync(ActionContext context)
