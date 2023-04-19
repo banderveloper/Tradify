@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Tradify.Identity.Application.Interfaces;
 
 namespace Tradify.Identity.Application
@@ -8,7 +9,7 @@ namespace Tradify.Identity.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddMediatR(config => 
-                config.RegisterServicesFromAssemblies(typeof(IApplicationDbContext).Assembly));
+                config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
 
             return services;
