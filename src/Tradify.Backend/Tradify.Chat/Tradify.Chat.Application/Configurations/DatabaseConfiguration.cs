@@ -1,6 +1,6 @@
-namespace Tradify.Chat.Application.Options;
+namespace Tradify.Chat.Application.Configurations;
 
-public class DatabaseOptions
+public class DatabaseConfiguration
 {
     public string ConnectionString { get; set; }
     public string User { get; set; }

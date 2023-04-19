@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Tradify.Chat.Application.Interfaces;
 
 namespace Tradify.Chat.Application;
 
