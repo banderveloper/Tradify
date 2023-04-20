@@ -7,10 +7,13 @@ using Tradify.Identity.Application.Responses.Errors;
 
 namespace Tradify.Identity.RestAPI.Results;
 
-public class ApiResult<TEntity> : ActionResult, IMappable
+public class ApiResult<TEntity> : ActionResult
 {
     public TEntity? Data { get; set; }
     public Error? Error { get; set; }
+
+    public ApiResult(MediatorResult<TEntity> mediatorResult)
+        => (Data, Error) = (mediatorResult.Data, mediatorResult.Error);
     
     public override async Task ExecuteResultAsync(ActionContext context)
     {
@@ -20,10 +23,5 @@ public class ApiResult<TEntity> : ActionResult, IMappable
         response.StatusCode = Error == null ? (int)HttpStatusCode.OK : (int)Error.StatusCode;
 
         await response.WriteAsJsonAsync(this);
-    }
-
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<Result<TEntity>, ApiResult<TEntity>>();
     }
 }

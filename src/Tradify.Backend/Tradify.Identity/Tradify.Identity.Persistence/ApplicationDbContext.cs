@@ -5,11 +5,11 @@ using Tradify.Identity.Persistence.EntityTypeConfigurations;
 
 namespace Tradify.Identity.Persistence
 {
-    public class ApplicationDbContext : DbContext, IApplicationDbContext
+    public class ApplicationDbContext : IApplicationDbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<RefreshSession> RefreshSessions { get; set; }
-        public DbSet<UserData> UserDatas { get; set; }
+        public override DbSet<User> Users { get; set; }
+        public override DbSet<RefreshSession> RefreshSessions { get; set; }
+        public override DbSet<UserData> UserDatas { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 

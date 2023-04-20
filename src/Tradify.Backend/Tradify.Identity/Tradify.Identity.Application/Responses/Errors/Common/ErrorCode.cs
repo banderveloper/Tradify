@@ -7,6 +7,10 @@
         UserNotFound,
         PasswordInvalid,
         
+        RefreshSessionNotFound,
+        UserByRefreshSessionNotFound,
         
+        RefreshInCookiesNotFound,
+        RefreshParseError
     }
 }

@@ -17,12 +17,12 @@ public class ApiControllerBase : ControllerBase
         _mapper ??= HttpContext.RequestServices.GetRequiredService<IMapper>();
 
     protected internal async Task<ApiResult<TValue>> RequestAsync<TValue>(
-        IRequest<Result<TValue>> request, CancellationToken cancellationToken)
+        IRequest<MediatorResult<TValue>> request)
     {
         // non generic / generic
-        var result = await _mediator.Send(request, cancellationToken);
+        var mediatorResult = await Mediator.Send(request);
 
-        return Mapper.Map<ApiResult<TValue>>(result); // apiResult;
+        return new ApiResult<TValue>(mediatorResult);
     }
     
 }

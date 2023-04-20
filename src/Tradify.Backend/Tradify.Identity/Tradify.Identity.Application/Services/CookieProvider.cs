@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Tradify.Identity.Application.Configurations;
 using Tradify.Identity.Application.Responses;
+using Tradify.Identity.Application.Responses.Errors;
+using Tradify.Identity.Application.Responses.Errors.Common;
 
 namespace Tradify.Identity.Application.Services;
 
@@ -38,15 +40,35 @@ public class CookieProvider
     }
 
     // Extract refresh token from http-only cookie
-    public Guid GetRefreshTokenFromCookie(HttpRequest request)
+    public MediatorResult<Guid> GetRefreshTokenFromCookie(HttpRequest request)
     {
-        if (!request.Cookies.ContainsKey(_refreshSessionConfiguration.RefreshCookieName))
-            return new Result()
+        var result = new MediatorResult<Guid>();
         
         // Try to extract refresh token from cookie. If it is absent - exception
-        if (!request.Cookies.TryGetValue(_refreshSessionConfiguration.RefreshCookieName, out var refreshToken))
-            throw new NotAcceptableRequestException { ErrorCode = ErrorCode.CookieRefreshTokenNotPassed };
+        if (!request.Cookies.TryGetValue(_refreshSessionConfiguration.RefreshCookieName, out var refreshTokenString))
+        {
+            result.Error = new ExpectedError("Cookies do not contain refresh token",
+                ErrorCode.RefreshInCookiesNotFound);
+        }
+        
+        if (!Guid.TryParse(refreshTokenString, out var refreshToken))
+        {
+            result.Error = new ExpectedError("Error on parsing refresh token from cookies",
+                ErrorCode.RefreshParseError);
+            return result;
+        }
 
-        return Guid.Parse(refreshToken);
+        result.Data = refreshToken;
+        return result;
+    }
+
+    public void DeleteJwtTokenFromCookies(HttpResponse response)
+    {
+        response.Cookies.Delete(_jwtConfiguration.JwtCookieName);
+    }
+
+    public void DeleteRefreshTokenFromCookies(HttpResponse response)
+    {
+        response.Cookies.Delete(_refreshSessionConfiguration.RefreshCookieName);
     }
 }

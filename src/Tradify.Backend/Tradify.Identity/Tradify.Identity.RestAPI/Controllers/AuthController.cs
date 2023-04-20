@@ -9,17 +9,27 @@ namespace Tradify.Identity.RestAPI.Controllers;
 [Route("auth")]
 public class AuthController : ApiControllerBase
 {
-    private IMapper _mapper;
-
-    public AuthController(IMapper mapper) =>
-        (_mapper) = (mapper);
-
     [HttpGet("login")]
-    public async Task<ActionResult> Login(LoginRequestModel requestModel, CancellationToken cancellationToken)
+    public async Task<ActionResult> Login([FromBody] LoginRequestModel requestModel)
     {
         //TODO: validation
-        var request = _mapper.Map<LoginCommand>(requestModel);
+        var request = Mapper.Map<LoginCommand>(requestModel);
         
-        return await RequestAsync(request, cancellationToken);
+        return await RequestAsync(request);
+    }
+
+    [HttpPut("refresh")]
+    public async Task<ActionResult> Refresh()
+    {
+        var request = new RefreshCommand();
+        
+        return await RequestAsync(request);
+    }
+
+    [HttpDelete("logout")]
+    public async Task<ActionResult> Logout()
+    {
+        //var request = new 
+        return Ok();
     }
 }
