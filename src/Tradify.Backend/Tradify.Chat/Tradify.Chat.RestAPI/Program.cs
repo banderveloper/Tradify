@@ -1,10 +1,14 @@
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Tradify.Chat.Application;
 using Tradify.Chat.Application.Configurations;
 using Tradify.Chat.Application.Mappings;
 using Tradify.Chat.Persistence;
+using Tradify.Chat.RestAPI.Middleware;
 
 // Allow DateTime for postgres
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -15,7 +19,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 // Database configuration registration
-builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection("Database"));
+builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));
+builder.Services.AddSingleton(resolver =>
+    resolver.GetRequiredService<IOptions<DatabaseConfiguration>>().Value);
+
+// Accepted jwt token configuration
+builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(JwtConfiguration.SectionName));
 builder.Services.AddSingleton(resolver =>
     resolver.GetRequiredService<IOptions<DatabaseConfiguration>>().Value);
 
@@ -63,6 +72,23 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile(new AssemblyMappingProfile(typeof(AssemblyMappingProfile).Assembly));
 });
 
+// Add bearer auth schema
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
 // Database initialize if it is null
 try
 {
@@ -79,6 +105,12 @@ catch (Exception ex)
 
 
 var app = builder.Build();
+
+app.UseCustomExceptionHandler();
+app.UseCookieAccessTokenExtractor();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI(config =>

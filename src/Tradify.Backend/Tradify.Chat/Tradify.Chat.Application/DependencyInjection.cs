@@ -9,6 +9,8 @@ public static class DependencyInjection
     {
         services.AddMediatR(config => 
             config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+        
+        
 
         return services;
     }
