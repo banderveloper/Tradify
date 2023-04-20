@@ -11,18 +11,19 @@ namespace Tradify.Chat.RestAPI.Controllers;
 // [Authorize]
 public class ApiControllerBase : ControllerBase
 {
+    private IMediator _mediator;
+    private IMapper _mapper;
+
     protected ISender Mediator =>
         HttpContext.RequestServices.GetRequiredService<IMediator>();
 
     protected IMapper Mapper =>
-        HttpContext.RequestServices.GetRequiredService<IMapper>();
+        _mapper = HttpContext.RequestServices.GetRequiredService<IMapper>();
 
-    protected internal async Task<ApiResult<TValue>> RequestAsync<TValue>(
-        IRequest<Result<TValue>> request, CancellationToken cancellationToken)
+    protected async Task<ApiResult<TValue>> RequestAsync<TValue>(
+        IRequest<MediatorResult<TValue>> request)
     {
-        // non generic / generic
-        var result = await Mediator.Send(request, cancellationToken);
-
-        return Mapper.Map<ApiResult<TValue>>(result); // apiResult;
+        var mediatorResult = await Mediator.Send(request);
+        return new ApiResult<TValue>(mediatorResult);
     }
 }

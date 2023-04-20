@@ -2,8 +2,8 @@ namespace Tradify.Chat.Domain.Entities;
 
 public class Message : BaseEntity
 {
-    public int ChatId { get; set; }
-    public int SenderId { get; set; }
+    public long ChatId { get; set; }
+    public long SenderId { get; set; }
     
     public string Body { get; set; }
     
