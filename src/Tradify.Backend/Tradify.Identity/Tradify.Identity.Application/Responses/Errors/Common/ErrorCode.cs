@@ -1,19 +1,22 @@
-﻿namespace Tradify.Identity.Application.Responses.Errors.Common
+﻿using System.Text.Json.Serialization;
+using Tradify.Identity.Application.Common.Converters;
+
+namespace Tradify.Identity.Application.Responses.Errors.Common;
+
+[JsonConverter(typeof(SnakeCaseStringEnumConverter<ErrorCode>))]
+public enum ErrorCode
 {
-    public enum ErrorCode
-    {
-        Unknown,
+    Unknown,
         
-        UserNotFound,
-        PasswordInvalid,
+    UserNotFound,
+    PasswordInvalid,
         
-        RefreshSessionNotFound,
-        UserByRefreshSessionNotFound,
+    RefreshSessionNotFound,
+    UserByRefreshSessionNotFound,
         
-        RefreshInCookiesNotFound,
-        RefreshParseError,
+    RefreshInCookiesNotFound,
+    RefreshParseError,
         
-        UserNameAlreadyExists,
-        EmailAlreadyExists,
-    }
+    UserNameAlreadyExists,
+    EmailAlreadyExists,
 }

@@ -13,6 +13,10 @@ using Tradify.Identity.Persistence;
 using Tradify.Identity.RestAPI;
 using Tradify.Identity.RestApi.Middleware;
 
+// Allow DateTime for postgres
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();

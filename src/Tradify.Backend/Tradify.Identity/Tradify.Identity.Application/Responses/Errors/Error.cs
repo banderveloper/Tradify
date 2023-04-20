@@ -4,6 +4,7 @@ using Tradify.Identity.Application.Responses.Errors.Common;
 
 namespace Tradify.Identity.Application.Responses.Errors;
 
+
 public abstract class Error
 {
     [JsonIgnore] public HttpStatusCode StatusCode { get; init; }

@@ -1,0 +1,54 @@
+version: '3'
+services:
+  
+  postgres:
+    container_name: postgres
+    build:
+      context: Tradify.Postgres
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_DB_USERNAME=arg_value
+        - POSTGRES_DB_PASSWORD=arg_value
+    hostname: tradify.postgres
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  
+  identity:
+    container_name: identity
+    build:
+      context: Tradify.Identity
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_DB_USERNAME=arg_value
+        - POSTGRES_DB_PASSWORD=arg_value
+    image: kpssnik/tradify.identity
+    hostname: tradify.identity
+    ports:
+      - 5001:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=DockerDevelopment
+    restart: on-failure
+    depends_on:
+      - postgres
+    
+  chat:
+    container_name: chat
+    build:
+      context: Tradify.Chat
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_DB_USERNAME=arg_value
+        - POSTGRES_DB_PASSWORD=arg_value
+    image: kpssnik/tradify.chat
+    hostname: tradify.chat
+    ports:
+      - 5002:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=DockerDevelopment
+    restart: on-failure
+    depends_on:
+      - postgres
+
+volumes:
+  db_data:

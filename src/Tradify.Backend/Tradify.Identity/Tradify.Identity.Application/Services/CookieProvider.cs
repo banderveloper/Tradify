@@ -20,22 +20,22 @@ public class CookieProvider
     public void AddRefreshCookieToResponse(HttpResponse response, string value)
     {
         response.Cookies.Append(_refreshSessionConfiguration.RefreshCookieName, value,
-            new CookieOptions()
+            new CookieOptions
             {
                 HttpOnly = true, 
                 SameSite = SameSiteMode.Lax,
-                Expires = new DateTimeOffset(DateTime.Now.AddHours(_refreshSessionConfiguration.HoursToExpiration))
+                Expires = new DateTimeOffset(DateTime.UtcNow.AddHours(_refreshSessionConfiguration.HoursToExpiration))
             });
     }
     
     public void AddJwtCookieToResponse(HttpResponse response, string value)
     {
         response.Cookies.Append(_jwtConfiguration.JwtCookieName, value,
-            new CookieOptions()
+            new CookieOptions
             {
                 HttpOnly = true, 
                 SameSite = SameSiteMode.Lax,
-                Expires = new DateTimeOffset(DateTime.Now.AddMinutes(_jwtConfiguration.MinutesToExpiration))
+                Expires = new DateTimeOffset(DateTime.UtcNow.AddMinutes(_jwtConfiguration.MinutesToExpiration))
             });
     }
 
