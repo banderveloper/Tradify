@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Tradify.Identity.Application.Mappings;
+using Tradify.Identity.Application.Common.Mappings;
 using Tradify.Identity.Application.Responses.Errors;
 
 namespace Tradify.Identity.Application.Responses;

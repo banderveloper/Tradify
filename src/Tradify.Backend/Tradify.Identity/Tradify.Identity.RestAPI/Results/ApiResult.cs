@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Tradify.Identity.Application.Mappings;
+using Tradify.Identity.Application.Common.Mappings;
 using Tradify.Identity.Application.Responses;
 using Tradify.Identity.Application.Responses.Errors;
 

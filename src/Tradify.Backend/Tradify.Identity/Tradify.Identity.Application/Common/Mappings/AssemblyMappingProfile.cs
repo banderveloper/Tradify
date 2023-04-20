@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tradify.Identity.Application.Mappings
+namespace Tradify.Identity.Application.Common.Mappings
 {
     public class AssemblyMappingProfile : Profile
     {

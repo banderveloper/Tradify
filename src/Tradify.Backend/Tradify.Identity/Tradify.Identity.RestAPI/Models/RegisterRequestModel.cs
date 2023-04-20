@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Tradify.Identity.Application.Features.User.Commands;
-using Tradify.Identity.Application.Mappings;
+using Tradify.Identity.Application.Common.Mappings;
 
 namespace Tradify.Identity.RestAPI.Models;
 

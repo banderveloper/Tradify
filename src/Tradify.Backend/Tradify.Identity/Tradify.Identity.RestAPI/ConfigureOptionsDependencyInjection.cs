@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using Tradify.Identity.Application.Configurations;
+using Tradify.Identity.Application.Common.Configurations;
 
 namespace Tradify.Identity.RestAPI;
 

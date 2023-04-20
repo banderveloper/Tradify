@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Common\" />
       <Folder Include="Features\Auth\Queries\" />
       <Folder Include="Features\User\Queries\" />
     </ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tradify.Identity.Application.Interfaces;
-using Tradify.Identity.Application.Configurations;
+using Tradify.Identity.Application.Common.Configurations;
 
 namespace Tradify.Identity.Persistence
 {

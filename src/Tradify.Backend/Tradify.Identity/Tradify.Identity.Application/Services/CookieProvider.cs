@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Tradify.Identity.Application.Configurations;
+using Tradify.Identity.Application.Common.Configurations;
 using Tradify.Identity.Application.Responses;
 using Tradify.Identity.Application.Responses.Errors;
 using Tradify.Identity.Application.Responses.Errors.Common;

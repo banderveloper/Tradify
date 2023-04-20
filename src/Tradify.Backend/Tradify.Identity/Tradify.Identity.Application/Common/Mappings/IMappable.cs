@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Tradify.Identity.Application.Mappings
+namespace Tradify.Identity.Application.Common.Mappings
 {
     public interface IMappable
     {

@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Tradify.Identity.Application.Configurations;
+using Tradify.Identity.Application.Common.Configurations;
 using Tradify.Identity.Domain.Entities;
 
 namespace Tradify.Identity.Application.Services;

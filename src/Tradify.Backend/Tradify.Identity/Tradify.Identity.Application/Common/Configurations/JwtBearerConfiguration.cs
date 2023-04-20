@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Tradify.Identity.Application.Configurations;
+namespace Tradify.Identity.Application.Common.Configurations;
 
 public class JwtBearerConfiguration : IConfigureNamedOptions<JwtBearerOptions>
 {

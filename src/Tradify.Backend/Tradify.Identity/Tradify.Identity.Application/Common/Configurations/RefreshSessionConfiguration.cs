@@ -1,4 +1,4 @@
-﻿namespace Tradify.Identity.Application.Configurations;
+﻿namespace Tradify.Identity.Application.Common.Configurations;
 
 public class RefreshSessionConfiguration
 {

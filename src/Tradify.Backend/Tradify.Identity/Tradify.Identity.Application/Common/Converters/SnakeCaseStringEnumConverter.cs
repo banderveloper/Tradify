@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Tradify.Identity.Application.Converters;
+namespace Tradify.Identity.Application.Common.Converters;
 
 public class SnakeCaseStringEnumConverter<T> : JsonConverter<T>
     where T : struct, Enum

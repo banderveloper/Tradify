@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Tradify.Identity.Application.Configurations;
+using Tradify.Identity.Application.Common.Configurations;
 
 namespace Tradify.Identity.RestApi.Middleware;
 
