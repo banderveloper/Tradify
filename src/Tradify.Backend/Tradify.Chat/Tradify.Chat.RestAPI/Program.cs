@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Tradify.Chat.Application;
 using Tradify.Chat.Application.Configurations;
+using Tradify.Chat.Application.Converters;
+using Tradify.Chat.Application.Errors.Common;
 using Tradify.Chat.Application.Mappings;
 using Tradify.Chat.Persistence;
 using Tradify.Chat.RestAPI.Middleware;
@@ -26,7 +28,7 @@ builder.Services.AddSingleton(resolver =>
 // Accepted jwt token configuration
 builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(JwtConfiguration.SectionName));
 builder.Services.AddSingleton(resolver =>
-    resolver.GetRequiredService<IOptions<DatabaseConfiguration>>().Value);
+    resolver.GetRequiredService<IOptions<JwtConfiguration>>().Value);
 
 // Inject another layers
 builder.Services.AddApplication().AddPersistence();
@@ -52,7 +54,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
 
         // ErrorCode enum to snake_case string converter
-        // options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<ErrorCode>());
+        options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<ErrorCode>());
     });
 
 // Swagger
