@@ -11,5 +11,7 @@ namespace Tradify.Chat.Application.Errors.Common;
 public enum ErrorCode
 {
     Unknown,
-    UserNotInChat
+    UserNotInChat,
+    MessageNotFound,
+    MessageDeletionNotAllowed
 }

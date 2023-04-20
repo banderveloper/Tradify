@@ -11,6 +11,8 @@ namespace Tradify.Chat.RestAPI.Controllers;
 // [Authorize]
 public class ApiControllerBase : ControllerBase
 {
+    protected long UserId = 1; // temporary, later - get from jwt token
+    
     private IMediator _mediator;
     private IMapper _mapper;
 

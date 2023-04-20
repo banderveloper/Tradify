@@ -7,7 +7,7 @@ namespace Tradify.Chat.RestAPI.Models.Message;
 
 public class CreateMessageRequestModel : IMappable
 {
-    [Required] [Range(0, long.MaxValue)] public long ChatId { get; set; }
+    [Required] [Range(1, long.MaxValue)] public long ChatId { get; set; }
 
     [Required] [MinLength(1)] public string Body { get; set; }
 

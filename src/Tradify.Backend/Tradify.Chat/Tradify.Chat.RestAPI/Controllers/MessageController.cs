@@ -11,8 +11,20 @@ public class MessageController : ApiControllerBase
     public async Task<IActionResult> CreateMessage([FromBody] CreateMessageRequestModel model)
     {
         var command = Mapper.Map<CreateMessageCommand>(model);
-        command.SenderId = 1; // temporary FROM TOKEN
+        command.SenderId = UserId;
 
         return await RequestAsync(command);
     }
+
+    [HttpDelete("{messageId:long}")]
+    public async Task<IActionResult> DeleteMessage(long messageId)
+    {
+        var command = new DeleteMessageCommand
+        {
+            MessageId = messageId,
+            SenderId = UserId
+        };
+
+        return await RequestAsync(command);
+    } 
 }
