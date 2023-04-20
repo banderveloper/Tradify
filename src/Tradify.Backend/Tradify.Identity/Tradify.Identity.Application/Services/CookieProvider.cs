@@ -45,10 +45,12 @@ public class CookieProvider
         var result = new MediatorResult<Guid>();
         
         // Try to extract refresh token from cookie. If it is absent - exception
-        if (!request.Cookies.TryGetValue(_refreshSessionConfiguration.RefreshCookieName, out var refreshTokenString))
+        var refreshTokenString = request.Cookies[_refreshSessionConfiguration.RefreshCookieName];
+        if(refreshTokenString is null)
         {
             result.Error = new ExpectedError("Cookies do not contain refresh token",
                 ErrorCode.RefreshInCookiesNotFound);
+            return result;
         }
         
         if (!Guid.TryParse(refreshTokenString, out var refreshToken))

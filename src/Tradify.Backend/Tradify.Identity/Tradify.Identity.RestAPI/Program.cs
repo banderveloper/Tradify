@@ -15,6 +15,8 @@ using Tradify.Identity.RestApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Configuration.AddEnvironmentVariables();
 
 //Configures JwtConfiguration, RefreshSessionConfiguration and DatabaseConfiguration

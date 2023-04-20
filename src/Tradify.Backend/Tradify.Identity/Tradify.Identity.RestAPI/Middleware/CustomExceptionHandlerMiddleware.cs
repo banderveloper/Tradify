@@ -4,13 +4,18 @@ using System.Text.Json;
 
 namespace Tradify.Identity.RestApi.Middleware
 {
-    public class CustomExceptionHandlerMiddleware : IMiddleware
+    public class CustomExceptionHandlerMiddleware
     {
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        private readonly RequestDelegate _next;
+
+        public CustomExceptionHandlerMiddleware(RequestDelegate next) =>
+            _next = next;
+        
+            public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await next(context);
+                await _next(context);
             }
             catch (Exception exception)
             {

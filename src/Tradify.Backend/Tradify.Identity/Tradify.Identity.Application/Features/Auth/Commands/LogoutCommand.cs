@@ -22,12 +22,12 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, MediatorResul
     public LogoutCommandHandler(
         IApplicationDbContext dbContext,
         JwtProvider jwtProvider,
-        HttpContext context,
+        IHttpContextAccessor accessor,
         CookieProvider cookieProvider)
     {
         _dbContext = dbContext;
         _jwtProvider = jwtProvider;
-        _context = context;
+        _context = accessor.HttpContext!; //TODO: consider
         _cookieProvider = cookieProvider;
     }
     

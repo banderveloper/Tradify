@@ -3,7 +3,7 @@ using Tradify.Identity.Application.Configurations;
 
 namespace Tradify.Identity.RestApi.Middleware;
 
-public class CookieAccessTokenExtractorMiddleware : IMiddleware
+public class CookieAccessTokenExtractorMiddleware
 {
     private readonly RequestDelegate _next;
     
@@ -15,7 +15,7 @@ public class CookieAccessTokenExtractorMiddleware : IMiddleware
         _configuration = configuration;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context)
     {
         var token = context.Request.Cookies[_configuration.JwtCookieName];
         if (!string.IsNullOrEmpty(token))

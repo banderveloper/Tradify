@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using BCrypt.Net;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -29,12 +30,12 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, MediatorResult<
     public LoginCommandHandler(
         IApplicationDbContext dbContext,
         JwtProvider jwtProvider,
-        HttpContext context,
+        IHttpContextAccessor accessor,
         CookieProvider cookieProvider)
     {
         _dbContext = dbContext;
         _jwtProvider = jwtProvider;
-        _context = context;
+        _context = accessor.HttpContext!; //TODO: consider
         _cookieProvider = cookieProvider;
     }
     
@@ -50,7 +51,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, MediatorResult<
             return result;
         }
 
-        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.PasswordHash))
+        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.PasswordHash, HashType.SHA512))
         {
             result.Error = new ExpectedError("Incorrect password", ErrorCode.PasswordInvalid);
             return result;
@@ -71,6 +72,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, MediatorResult<
                 UserId = user.Id,
                 RefreshToken = Guid.NewGuid()
             };
+            _dbContext.RefreshSessions.Add(existingSession);
         }
         //if session exists - update existing one
         else

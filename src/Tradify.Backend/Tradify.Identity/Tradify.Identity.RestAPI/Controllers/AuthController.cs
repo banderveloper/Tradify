@@ -10,7 +10,7 @@ namespace Tradify.Identity.RestAPI.Controllers;
 public class AuthController : ApiControllerBase
 {
     [HttpGet("login")]
-    public async Task<ActionResult> Login([FromBody] LoginRequestModel requestModel)
+    public async Task<ActionResult> Login([FromQuery] LoginRequestModel requestModel)
     {
         //TODO: validation
         var request = Mapper.Map<LoginCommand>(requestModel);
