@@ -4,7 +4,7 @@ namespace Tradify.Identity.Domain.Entities
 {
     public class RefreshSession : BaseEntity
     {
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public Guid RefreshToken { get; set; }
 
         [JsonIgnore] 

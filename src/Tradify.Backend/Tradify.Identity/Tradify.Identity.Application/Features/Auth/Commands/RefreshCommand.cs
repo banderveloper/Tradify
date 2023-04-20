@@ -27,7 +27,7 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, MediatorRes
     {
         _dbContext = dbContext;
         _jwtProvider = jwtProvider;
-        _context = accessor.HttpContext!; //TODO: consider
+        _context = accessor.HttpContext!;
         _cookieProvider = cookieProvider;
     }
     
