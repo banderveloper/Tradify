@@ -17,7 +17,7 @@ public static class DependencyInjection
         {
             var filledConnectionString = string.Format(dbConfig.ConnectionString, dbConfig.User, dbConfig.Password);
             
-            //TODO: after development, delete Sqlite NuGet
+            // TODO: after development, delete Sqlite NuGet
             options.UseSqlite(filledConnectionString);
             
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);

@@ -12,17 +12,17 @@ namespace Tradify.Chat.Application.Features.Message;
 // Request
 public class CreateMessageCommand : IRequest<MediatorResult<CreateMessageResponseModel>>
 {
-    public int ChatId { get; set; }
-    public int SenderId { get; set; }
+    public long ChatId { get; set; }
+    public long SenderId { get; set; }
     public string Body { get; set; }
 }
 
 // Response
 public class CreateMessageResponseModel : IMappable
 {
-    public int Id { get; set; }
-    public int ChatId { get; set; }
-    public int SenderId { get; set; }
+    public long Id { get; set; }    // created message id
+    public long ChatId { get; set; }
+    public long SenderId { get; set; }
     public string Body { get; set; }
 
     public void Mapping(Profile profile) =>
