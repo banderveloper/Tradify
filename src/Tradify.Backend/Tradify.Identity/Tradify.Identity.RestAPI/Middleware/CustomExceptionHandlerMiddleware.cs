@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Text.Json;
 
 namespace Tradify.Identity.RestApi.Middleware
 {
@@ -20,8 +21,18 @@ namespace Tradify.Identity.RestApi.Middleware
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
+
+            switch (exception)
+            {
+                case JsonException jsonException:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
+                default:
+                    context.Response.StatusCode = 500;
+                    break;
+            }
             
-            context.Response.StatusCode = 500;
+            await context.Response.WriteAsync(exception.Message);
         }
     }
 }

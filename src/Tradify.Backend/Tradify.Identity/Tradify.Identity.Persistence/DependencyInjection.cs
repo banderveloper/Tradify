@@ -10,7 +10,7 @@ namespace Tradify.Identity.Persistence
         public static IServiceCollection AddPersistence(this IServiceCollection services)
         {
             // Get service configuration from services
-            var scope = services.BuildServiceProvider().CreateScope();
+            using var scope = services.BuildServiceProvider().CreateScope();
             var dbConfig = scope.ServiceProvider.GetRequiredService<DatabaseConfiguration>();
 
             // register db context

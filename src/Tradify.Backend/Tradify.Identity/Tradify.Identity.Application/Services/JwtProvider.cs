@@ -11,8 +11,8 @@ namespace Tradify.Identity.Application.Services;
 public class JwtProvider
 {
     private readonly JwtConfiguration _configuration;
-    public JwtProvider(IOptions<JwtConfiguration> options) =>
-        _configuration = options.Value;
+    public JwtProvider(JwtConfiguration configuration) =>
+        _configuration = configuration;
 
     public string CreateToken(User user)
     {

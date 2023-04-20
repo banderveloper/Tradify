@@ -24,7 +24,7 @@ public class CookieProvider
             {
                 HttpOnly = true, 
                 SameSite = SameSiteMode.Lax,
-                Expires = new DateTimeOffset(DateTime.Now.AddHours(_refreshSessionConfiguration.RefreshCookieLifetimeHours))
+                Expires = new DateTimeOffset(DateTime.Now.AddHours(_refreshSessionConfiguration.HoursToExpiration))
             });
     }
     

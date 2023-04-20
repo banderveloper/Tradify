@@ -5,5 +5,5 @@ public class RefreshSessionConfiguration
     public static readonly string RefreshSessionSection = "RefreshSession";
     
     public string RefreshCookieName { get; set; }
-    public int RefreshCookieLifetimeHours { get; set; }
+    public int HoursToExpiration { get; set; }
 }
