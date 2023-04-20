@@ -11,7 +11,7 @@ public class UserData : BaseEntity
     
     public string? Phone { get; set; }
     
-    public string? Adress { get; set; }
+    public string? HomeAddress { get; set; }
 
     public DateOnly BirthDate { get; set; }
 }

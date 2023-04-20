@@ -6,6 +6,7 @@ using Tradify.Identity.RestAPI.Results;
 
 namespace Tradify.Identity.RestAPI.Controllers;
 
+[ApiController]
 public class ApiControllerBase : ControllerBase
 {
     private ISender _mediator;

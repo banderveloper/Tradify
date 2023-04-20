@@ -29,7 +29,8 @@ public class AuthController : ApiControllerBase
     [HttpDelete("logout")]
     public async Task<ActionResult> Logout()
     {
-        //var request = new 
-        return Ok();
+        var request = new LogoutCommand();
+
+        return await RequestAsync(request);
     }
 }

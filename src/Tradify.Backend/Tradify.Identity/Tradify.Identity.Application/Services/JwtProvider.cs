@@ -24,7 +24,7 @@ public class JwtProvider
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Key));
 
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha384Signature);
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var token = new JwtSecurityToken(
             _configuration.Issuer,

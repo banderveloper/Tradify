@@ -11,6 +11,9 @@
         UserByRefreshSessionNotFound,
         
         RefreshInCookiesNotFound,
-        RefreshParseError
+        RefreshParseError,
+        
+        UserNameAlreadyExists,
+        EmailAlreadyExists,
     }
 }

@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Tradify.Identity.Application.Interfaces
 {
-    public abstract class IApplicationDbContext : DbContext
+    public interface IApplicationDbContext
     {
-        public abstract DbSet<User> Users { get; set; }
-        public abstract DbSet<RefreshSession> RefreshSessions { get; set; }
-        public abstract DbSet<UserData> UserDatas { get; set; }
+        DbSet<User> Users { get; set; }
+        DbSet<RefreshSession> RefreshSessions { get; set; }
+        DbSet<UserData> UserDatas { get; set; }
 
-        protected IApplicationDbContext(DbContextOptions options):base(options){}
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

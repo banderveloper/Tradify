@@ -50,7 +50,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, MediatorResult<
             return result;
         }
 
-        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.Password))
+        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.PasswordHash))
         {
             result.Error = new ExpectedError("Incorrect password", ErrorCode.PasswordInvalid);
             return result;

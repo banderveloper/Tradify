@@ -6,13 +6,13 @@ namespace Tradify.Identity.Domain.Entities
     public class User : BaseEntity
     {
         public string UserName { get; set; }
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
         
         public string Email { get; set; }
 
-        public UserRole Role { get; set; }
+        public UserRole Role { get; set; } = UserRole.User;
 
-        public bool IsEmailConfirmed { get; set; }
+        public bool IsEmailConfirmed { get; set; } = false;
         
         public UserData? UserData { get; set; }
     }
