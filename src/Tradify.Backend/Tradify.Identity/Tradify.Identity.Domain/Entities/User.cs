@@ -14,6 +14,7 @@ namespace Tradify.Identity.Domain.Entities
 
         public bool IsEmailConfirmed { get; set; } = false;
         
-        public UserData? UserData { get; set; }
+        public long UserDataId { get; set; }
+        public UserData UserData { get; set; }
     }
 }

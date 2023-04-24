@@ -3,7 +3,10 @@
 public class UserData : BaseEntity
 {
     public long UserId { get; set; }
-    public User? User { get; set; }
+    public User User { get; set; }
+
+    public string AvatarPath { get; set; } = 
+        "https://herrmans.de/wp-content/uploads/2019/01/765-default-avatar.png";
     
     public string FirstName { get; set; }
     public string LastName { get; set; }

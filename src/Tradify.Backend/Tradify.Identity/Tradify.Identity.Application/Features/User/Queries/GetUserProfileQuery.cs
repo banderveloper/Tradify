@@ -1,0 +1,61 @@
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Tradify.Identity.Application.Interfaces;
+using Tradify.Identity.Application.Responses;
+
+namespace Tradify.Identity.Application.Features.User.Queries;
+
+public class UserProfileResponseModel
+{
+    public string AvatarPath { get; set; }
+    
+    public string UserName { get; set; }
+    
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string? MiddleName { get; set; }
+    
+    public string? Phone { get; set; }
+}
+
+public class GetUserProfileQuery : IRequest<MediatorResult<UserProfileResponseModel>>
+{
+    public int UserId { get; set; }
+}
+
+public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, MediatorResult<UserProfileResponseModel>>
+{
+    private readonly IApplicationDbContext _dbContext;
+
+    public GetUserProfileQueryHandler(IApplicationDbContext dbContext) =>
+        _dbContext = dbContext;
+
+        public async Task<MediatorResult<UserProfileResponseModel>> Handle(
+        GetUserProfileQuery request,
+        CancellationToken cancellationToken)
+    {
+        var result = new MediatorResult<UserProfileResponseModel>();
+
+        var userProfileResponseModel = await _dbContext.Users
+            .Where(u => u.Id == request.UserId)
+            .Include(u => u.UserData)
+            .Select(u =>
+                new UserProfileResponseModel()
+                {
+                    UserName = u.UserName,
+
+                    AvatarPath = u.UserData.AvatarPath,
+                    
+                    FirstName = u.UserData.FirstName,
+                    LastName = u.UserData.LastName,
+                    MiddleName = u.UserData.MiddleName,
+
+                    Phone = u.UserData.Phone,
+                })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        result.Data = userProfileResponseModel;
+        
+        return result;
+    }
+}
