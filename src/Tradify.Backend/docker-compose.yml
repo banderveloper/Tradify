@@ -22,7 +22,7 @@ services:
       args:
         - POSTGRES_DB_USERNAME=arg_value
         - POSTGRES_DB_PASSWORD=arg_value
-    image: kpssnik/tradify.identity
+    image: lyakabynka/tradify.identity
     hostname: tradify.identity
     ports:
       - 5001:80
@@ -40,7 +40,7 @@ services:
       args:
         - POSTGRES_DB_USERNAME=arg_value
         - POSTGRES_DB_PASSWORD=arg_value
-    image: kpssnik/tradify.chat
+    image: lyakabynka/tradify.chat
     hostname: tradify.chat
     ports:
       - 5002:80
