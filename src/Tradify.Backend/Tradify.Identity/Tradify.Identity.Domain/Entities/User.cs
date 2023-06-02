@@ -1,4 +1,5 @@
-﻿using Tradify.Identity.Domain.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Tradify.Identity.Domain.Enums;
 
 namespace Tradify.Identity.Domain.Entities
 {
@@ -14,7 +15,11 @@ namespace Tradify.Identity.Domain.Entities
 
         public bool IsEmailConfirmed { get; set; } = false;
         
-        public long UserDataId { get; set; }
         public UserData UserData { get; set; }
+        
+        public List<RefreshSession> RefreshSessions { get; set; }
     }
 }
+
+
+

@@ -8,8 +8,10 @@ namespace Tradify.Identity.Persistence.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<RefreshSession> builder)
         {
-            builder.HasKey(x => x.Id);
-            builder.HasOne(x => x.User);
+            builder.HasKey(r => r.Id);
+            builder.HasOne(r => r.User)
+                .WithMany(u => u.RefreshSessions)
+                .HasForeignKey(r => r.UserId);
         }
     }
 }

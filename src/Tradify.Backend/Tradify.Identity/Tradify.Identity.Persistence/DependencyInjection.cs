@@ -17,7 +17,7 @@ namespace Tradify.Identity.Persistence
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 var filledConnectionString = string.Format(dbConfig.ConnectionString, dbConfig.User, dbConfig.Password);
-
+                
                 options.UseNpgsql(filledConnectionString);
 
                 // for optimizing read-only queries, disabling caching of entities

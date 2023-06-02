@@ -1,16 +1,17 @@
 ﻿using BCrypt.Net;
+using FluentValidation;
+using FluentValidation.Results;
+using LanguageExt.Common;
 using MediatR;
 using Tradify.Identity.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Tradify.Identity.Application.Interfaces;
-using Tradify.Identity.Application.Responses;
-using Tradify.Identity.Application.Responses.Errors;
-using Tradify.Identity.Application.Responses.Errors.Common;
-using Tradify.Identity.Application.Responses.Types;
+
+using Unit = LanguageExt.Unit;
 
 namespace Tradify.Identity.Application.Features.User.Commands;
 
-public class RegisterCommand : IRequest<MediatorResult<Empty>>
+public class RegisterCommand : IRequest<Result<Unit>>
 {
     public string UserName { get; set; }
     public string Password { get; set; }
@@ -25,7 +26,7 @@ public class RegisterCommand : IRequest<MediatorResult<Empty>>
     public DateOnly BirthDate { get; set; }
 }
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, MediatorResult<Empty>>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Unit>>
 {
     private readonly IApplicationDbContext _dbContext;
 
@@ -33,29 +34,32 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, MediatorR
     {
         _dbContext = dbContext;
     }
-
-    public async Task<MediatorResult<Empty>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    
+    public async Task<Result<Unit>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var result = new MediatorResult<Empty>();
-        
-        var existingUser = await _dbContext.Users
-            .FirstOrDefaultAsync(u=>u.UserName == request.UserName || u.Email == request.Email,
-                cancellationToken);
-
-        if (existingUser is not null)
+        List<ValidationFailure>? failures = null;
+        if (await _dbContext.Users.AnyAsync(u=>u.UserName == request.UserName, cancellationToken))
         {
-            if (existingUser.UserName == request.UserName)
-            {
-                result.Error = new ExpectedError("User with given user name already exists",
-                    ErrorCode.UserNameAlreadyExists);
-                return result;
-            }
-            else // (user.Email == request.Email)
-            {
-                result.Error = new ExpectedError("User with given email already exists",
-                    ErrorCode.EmailAlreadyExists);
-                return result;
-            }
+            failures ??= new List<ValidationFailure>();
+            
+            var message = "User with given user name already exists.";
+            failures.Add(
+                new ValidationFailure(nameof(request.UserName),message));
+        }
+        
+        if (await _dbContext.Users.AnyAsync(u=>u.Email == request.Email, cancellationToken))
+        { 
+            failures ??= new List<ValidationFailure>();
+            
+            var message = "User with given email already exists.";
+            failures.Add(
+                new ValidationFailure(nameof(request.Email),message));
+        }
+
+        if(failures is not null)
+        {
+            var error = new ValidationException(failures);
+            return new Result<Unit>(error);
         }
 
         var user = new Domain.Entities.User()
@@ -78,7 +82,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, MediatorR
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return result;
+        return Unit.Default;
     }
 }
 

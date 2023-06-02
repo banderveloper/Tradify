@@ -7,7 +7,6 @@ using Tradify.Identity.Application;
 using Tradify.Identity.Application.Common.Converters;
 using Tradify.Identity.Application.Common.Mappings;
 using Tradify.Identity.Application.Interfaces;
-using Tradify.Identity.Application.Responses.Errors.Common;
 using Tradify.Identity.Domain.Enums;
 using Tradify.Identity.Persistence;
 using Tradify.Identity.RestAPI;
@@ -58,7 +57,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<UserRole>());
-        options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<ErrorCode>());
+        //options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<ErrorCode>());
     });
 
 builder.Services.AddAutoMapper(options =>
@@ -74,7 +73,7 @@ builder.Services.AddSwaggerGen(config =>
 {
     config.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        In = ParameterLocation.Header,
+        In = ParameterLocation.Cookie,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });

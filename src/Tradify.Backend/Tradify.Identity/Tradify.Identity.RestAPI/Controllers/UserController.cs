@@ -10,7 +10,7 @@ namespace Tradify.Identity.RestAPI.Controllers;
 public class UserController : ApiControllerBase
 {
     [HttpPost("register")]
-    public async Task<ActionResult> Register([FromBody] RegisterRequestModel requestModel)
+    public async Task<IActionResult> Register([FromBody] RegisterRequestModel requestModel)
     {
         var request = Mapper.Map<RegisterCommand>(requestModel);
 
@@ -18,9 +18,9 @@ public class UserController : ApiControllerBase
     }
 
     [HttpGet("public/{usersIds}")]
-    public async Task<ActionResult> GetUsersByIds([FromRoute] IEnumerable<int> usersIds)
+    public async Task<IActionResult> GetUsersByIds([FromRoute] params int[] usersIds)
     {
-        var request = new GetUsersQuery()
+        var request = new GetUsersSummariesQuery()
         {
             UsersIds = usersIds
         };
@@ -29,7 +29,7 @@ public class UserController : ApiControllerBase
     }
     
     [HttpGet("public/{userId:int}")]
-    public async Task<ActionResult> GetUserProfileById([FromRoute] int userId)
+    public async Task<IActionResult> GetUserProfileById([FromRoute] int userId)
     {
         var request = new GetUserProfileQuery()
         {
@@ -41,13 +41,32 @@ public class UserController : ApiControllerBase
     
     [Authorize]
     [HttpGet("{userId:int}")]
-    public async Task<ActionResult> GetUserPersonalById([FromRoute] int userId)
+    public async Task<IActionResult> GetUserPersonalById([FromRoute] int userId)
     {
         var request = new GetUserPersonalQuery()
         {
             UserId = userId
         };
 
+        return await RequestAsync(request);
+    }
+    
+    [Authorize]
+    [HttpPut("{userId:int}")]
+    public async Task<IActionResult> UpdateUserData([FromBody] UpdateUserDataRequestModel updateUserDataRequestModel)
+    {
+        var request = new UpdateUserDataCommand()
+        {
+            UserId = updateUserDataRequestModel.UserId, // TODO: take Id out of here ( receive id from Claims )
+            AvatarPath = updateUserDataRequestModel.AvatarPath,
+            FirstName = updateUserDataRequestModel.FirstName,
+            LastName = updateUserDataRequestModel.LastName,
+            MiddleName = updateUserDataRequestModel.MiddleName,
+            Phone = updateUserDataRequestModel.Phone,
+            HomeAddress = updateUserDataRequestModel.HomeAddress,
+            BirthDate = updateUserDataRequestModel.BirthDate
+        };
+    
         return await RequestAsync(request);
     }
 }

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using LanguageExt.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Tradify.Identity.Application.Responses;
-using Tradify.Identity.RestAPI.Results;
+using Tradify.Identity.Application.Common.Extensions;
 
 namespace Tradify.Identity.RestAPI.Controllers;
 
@@ -16,14 +17,4 @@ public class ApiControllerBase : ControllerBase
         _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
     protected IMapper Mapper =>
         _mapper ??= HttpContext.RequestServices.GetRequiredService<IMapper>();
-
-    protected internal async Task<ApiResult<TValue>> RequestAsync<TValue>(
-        IRequest<MediatorResult<TValue>> request)
-    {
-        // non generic / generic
-        var mediatorResult = await Mediator.Send(request);
-
-        return new ApiResult<TValue>(mediatorResult);
-    }
-    
 }

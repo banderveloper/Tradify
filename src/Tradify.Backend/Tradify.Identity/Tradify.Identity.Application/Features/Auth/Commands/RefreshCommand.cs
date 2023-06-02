@@ -1,18 +1,16 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Tradify.Identity.Application.Interfaces;
-using Tradify.Identity.Application.Responses;
-using Tradify.Identity.Application.Responses.Errors;
-using Tradify.Identity.Application.Responses.Errors.Common;
-using Tradify.Identity.Application.Responses.Types;
 using Tradify.Identity.Application.Services;
 
 namespace Tradify.Identity.Application.Features.Auth.Commands;
 
-public class RefreshCommand : IRequest<MediatorResult<Empty>> {}
+public class RefreshCommand : IRequest<Result<Unit>> {}
 
-public class RefreshCommandHandler : IRequestHandler<RefreshCommand, MediatorResult<Empty>>
+public class RefreshCommandHandler : IRequestHandler<RefreshCommand, Result<Unit>>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly JwtProvider _jwtProvider;
@@ -31,38 +29,47 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, MediatorRes
         _cookieProvider = cookieProvider;
     }
     
-    public async Task<MediatorResult<Empty>> Handle(RefreshCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
-        var result = new MediatorResult<Empty>();  
-        
         var refreshToken = _cookieProvider.GetRefreshTokenFromCookie(_context.Request);
-        if (refreshToken.Error is not null)
+        if (refreshToken is null)
         {
-            result.Error = refreshToken.Error;
-            return result;
+            var message = "Error on getting refresh token from cookie.";
+            var error = new ValidationException(new[]
+            {
+                new ValidationFailure(nameof(refreshToken),message)
+            });
+            return new Result<Unit>(error);
         }
         
         var existingSession = await _dbContext.RefreshSessions
             .AsTracking()
-            .FirstOrDefaultAsync(session => session.RefreshToken == refreshToken.Data, cancellationToken);
+            .FirstOrDefaultAsync(session => session.RefreshToken == refreshToken, cancellationToken);
         if (existingSession is null)
         {
-            result.Error = new ExpectedError("Refresh session was not found", ErrorCode.RefreshSessionNotFound);
-            return result;
+            var message = "Refresh session was not found.";
+            var error = new ValidationException(new[]
+            {
+                new ValidationFailure(nameof(refreshToken),message)
+            });
+            return new Result<Unit>(error);
         }
 
         existingSession.RefreshToken = Guid.NewGuid();
-        existingSession.UpdatedAt = DateTime.Now;
+        existingSession.UpdatedAt = DateTime.UtcNow;
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Id == existingSession.UserId);
+            .FirstOrDefaultAsync(u => u.Id == existingSession.UserId, cancellationToken);
         if (user is null)
         {
-            result.Error = new ExpectedError("User with found refresh session was not found",
-                ErrorCode.UserByRefreshSessionNotFound);
-            return result;
+            var message = "User with found refresh session was not found.";
+            var error = new ValidationException(new[]
+            {
+                new ValidationFailure(nameof(refreshToken),message)
+            });
+            return new Result<Unit>(error);
         }
         
         var jwtToken = _jwtProvider.CreateToken(user);
@@ -72,6 +79,6 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, MediatorRes
         _cookieProvider.AddRefreshCookieToResponse(_context.Response, 
             existingSession.RefreshToken.ToString());
 
-        return result;
+        return Unit.Default;
     }
 }

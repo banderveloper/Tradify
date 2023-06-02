@@ -1,7 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt.Common;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tradify.Identity.Application.Interfaces;
-using Tradify.Identity.Application.Responses;
 
 namespace Tradify.Identity.Application.Features.User.Queries;
 
@@ -18,24 +18,22 @@ public class UserProfileResponseModel
     public string? Phone { get; set; }
 }
 
-public class GetUserProfileQuery : IRequest<MediatorResult<UserProfileResponseModel>>
+public class GetUserProfileQuery : IRequest<Result<UserProfileResponseModel?>>
 {
     public int UserId { get; set; }
 }
 
-public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, MediatorResult<UserProfileResponseModel>>
+public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, Result<UserProfileResponseModel?>>
 {
     private readonly IApplicationDbContext _dbContext;
 
     public GetUserProfileQueryHandler(IApplicationDbContext dbContext) =>
         _dbContext = dbContext;
 
-        public async Task<MediatorResult<UserProfileResponseModel>> Handle(
+        public async Task<Result<UserProfileResponseModel?>> Handle(
         GetUserProfileQuery request,
         CancellationToken cancellationToken)
     {
-        var result = new MediatorResult<UserProfileResponseModel>();
-
         var userProfileResponseModel = await _dbContext.Users
             .Where(u => u.Id == request.UserId)
             .Include(u => u.UserData)
@@ -54,8 +52,6 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, M
                 })
             .FirstOrDefaultAsync(cancellationToken);
 
-        result.Data = userProfileResponseModel;
-        
-        return result;
+        return userProfileResponseModel;
     }
 }

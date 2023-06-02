@@ -17,6 +17,7 @@ namespace Tradify.Identity.Persistence
         {
             modelBuilder.ApplyConfiguration(new RefreshSessionConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserDataConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

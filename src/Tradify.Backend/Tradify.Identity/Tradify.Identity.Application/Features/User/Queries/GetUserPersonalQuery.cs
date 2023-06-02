@@ -1,7 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt.Common;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tradify.Identity.Application.Interfaces;
-using Tradify.Identity.Application.Responses;
 
 namespace Tradify.Identity.Application.Features.User.Queries;
 
@@ -24,12 +24,12 @@ public class UserPersonalResponseModel
     public DateOnly BirthDate { get; set; }
 }
 
-public class GetUserPersonalQuery : IRequest<MediatorResult<UserPersonalResponseModel>>
+public class GetUserPersonalQuery : IRequest<Result<UserPersonalResponseModel?>>
 {
     public int UserId { get; set; }
 }
 
-public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery, MediatorResult<UserPersonalResponseModel>>
+public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery, Result<UserPersonalResponseModel?>>
 {
     private readonly IApplicationDbContext _dbContext;
 
@@ -38,10 +38,8 @@ public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery,
         _dbContext = dbContext;
     }
     
-    public async Task<MediatorResult<UserPersonalResponseModel>> Handle(GetUserPersonalQuery request, CancellationToken cancellationToken)
+    public async Task<Result<UserPersonalResponseModel?>> Handle(GetUserPersonalQuery request, CancellationToken cancellationToken)
     {
-        var result = new MediatorResult<UserPersonalResponseModel>();
-
         var userPersonalResponseModel = await _dbContext.Users
             .Where(u => u.Id == request.UserId)
             .Include(u => u.UserData)
@@ -65,8 +63,6 @@ public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery,
                 })
             .FirstOrDefaultAsync(cancellationToken);
 
-        result.Data = userPersonalResponseModel;
-
-        return result;
+        return userPersonalResponseModel;
     }
 }
