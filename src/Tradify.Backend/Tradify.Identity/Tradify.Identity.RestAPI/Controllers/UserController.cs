@@ -50,16 +50,4 @@ public class UserController : ApiControllerBase
 
         return await RequestAsync(request);
     }
-    
-    [Authorize]
-    [HttpPut("{userId:int}")]
-    public async Task<ActionResult> GetUserPersonalById([FromRoute] int userId, [FromBody] )
-    {
-        var request = new GetUserPersonalQuery()
-        {
-            UserId = userId
-        };
-
-        return await RequestAsync(request);
-    }
 }
