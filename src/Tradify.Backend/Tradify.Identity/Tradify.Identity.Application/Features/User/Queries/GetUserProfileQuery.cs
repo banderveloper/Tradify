@@ -1,6 +1,7 @@
-﻿using LanguageExt.Common;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OneOf;
+using Tradify.Identity.Application.Common.MediatorResults;
 using Tradify.Identity.Application.Interfaces;
 
 namespace Tradify.Identity.Application.Features.User.Queries;
@@ -18,19 +19,19 @@ public class UserProfileResponseModel
     public string? Phone { get; set; }
 }
 
-public class GetUserProfileQuery : IRequest<Result<UserProfileResponseModel?>>
+public class GetUserProfileQuery : IRequest<OneOf<UserProfileResponseModel, UserNotFound>>
 {
     public int UserId { get; set; }
 }
 
-public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, Result<UserProfileResponseModel?>>
+public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, OneOf<UserProfileResponseModel, UserNotFound>>
 {
     private readonly IApplicationDbContext _dbContext;
 
     public GetUserProfileQueryHandler(IApplicationDbContext dbContext) =>
         _dbContext = dbContext;
 
-        public async Task<Result<UserProfileResponseModel?>> Handle(
+        public async Task<OneOf<UserProfileResponseModel, UserNotFound>> Handle(
         GetUserProfileQuery request,
         CancellationToken cancellationToken)
     {
@@ -52,6 +53,9 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, R
                 })
             .FirstOrDefaultAsync(cancellationToken);
 
+        if (userProfileResponseModel is null)
+            return new UserNotFound("User with given id was not found.");
+        
         return userProfileResponseModel;
     }
 }

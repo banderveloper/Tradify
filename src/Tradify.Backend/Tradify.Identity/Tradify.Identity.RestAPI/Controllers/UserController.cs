@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tradify.Identity.Application.Common.Extensions;
 using Tradify.Identity.Application.Features.User.Commands;
 using Tradify.Identity.Application.Features.User.Queries;
 using Tradify.Identity.RestAPI.Models;
@@ -14,7 +15,11 @@ public class UserController : ApiControllerBase
     {
         var request = Mapper.Map<RegisterCommand>(requestModel);
 
-        return await RequestAsync(request);
+        var result = await Mediator.Send(request);
+        return result.Match<IActionResult>(
+            success => Ok(),
+            userAlreadyExists => Conflict(),
+            validationResult => BadRequest(validationResult.ToProblemDetails()));
     }
 
     [HttpGet("public/{usersIds}")]

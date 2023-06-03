@@ -1,10 +1,11 @@
 ﻿using BCrypt.Net;
-using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
+using OneOf.Types;
+using Tradify.Identity.Application.Common.MediatorResults;
 using Tradify.Identity.Application.Interfaces;
 using Tradify.Identity.Application.Services;
 using Tradify.Identity.Domain.Entities;
@@ -12,13 +13,13 @@ using Tradify.Identity.Domain.Entities;
 namespace Tradify.Identity.Application.Features.Auth.Commands;
 
 
-public class LoginCommand : IRequest<OneOf<Unit, ValidationException>>
+public class LoginCommand : IRequest<OneOf<Success, InvalidCredentials>>
 {
     public string UserName { get; set; }
     public string Password { get; set; }
 }
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Unit, ValidationException>>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Success, InvalidCredentials>>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly JwtProvider _jwtProvider;
@@ -37,30 +38,16 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Unit, Val
         _cookieProvider = cookieProvider;
     }
     
-    public async Task<OneOf<Unit,ValidationException>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<OneOf<Success, InvalidCredentials>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.UserName == request.UserName, cancellationToken);
-        if (user is null)
+        if (user is null ||
+            !BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.PasswordHash, HashType.SHA512))
         {
-            var message = "User with given username does not exist.";
-            var error = new ValidationException(new[]
-            {
-                new ValidationFailure(nameof(request.UserName),message)
-            });
-            return error;
+            return new InvalidCredentials("Incorrect username or/and password.");
         }
 
-        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.PasswordHash, HashType.SHA512))
-        {
-            var message = "Invalid password.";
-            var error = new ValidationException(new[]
-            {
-                new ValidationFailure(nameof(request.Password),message)
-            });
-            return error;
-        }
-    
         //finding existing session by user id
         var existingSession = await _dbContext.RefreshSessions
             .AsTracking()
@@ -91,7 +78,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Unit, Val
         _cookieProvider.AddJwtCookieToResponse(_context.Response, jwtToken);
         _cookieProvider.AddRefreshCookieToResponse(_context.Response,existingSession.RefreshToken.ToString());
 
-        return Unit.Value;
+        return new Success();
     }
 }
 

@@ -7,12 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Tradify.Identity.Application.Interfaces;
 using Tradify.Identity.Application.Services;
 using OneOf;
+using OneOf.Types;
+using Tradify.Identity.Application.Common.MediatorResults;
 
 namespace Tradify.Identity.Application.Features.Auth.Commands;
 
-public class LogoutCommand : IRequest<OneOf<Unit,ValidationException>> {}
+public class LogoutCommand : IRequest<OneOf<Success,InvalidRefreshToken>> {}
 
-public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Unit,ValidationException>>
+public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Success,InvalidRefreshToken>>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly JwtProvider _jwtProvider;
@@ -31,29 +33,19 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Unit,Va
         _cookieProvider = cookieProvider;
     }
     
-    public async Task<OneOf<Unit,ValidationException>> Handle(LogoutCommand request, CancellationToken cancellationToken)
+    public async Task<OneOf<Success,InvalidRefreshToken>> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = _cookieProvider.GetRefreshTokenFromCookie(_context.Request);
         if (refreshToken is null)
         {
-            var message = "Error on getting refresh token from cookie.";
-            var error = new ValidationException(new[]
-            {
-                new ValidationFailure(nameof(refreshToken),message)
-            });
-            return error;
+            return new InvalidRefreshToken("Unable to extract refresh token from cookies.");
         }
 
         var existingSession = await _dbContext.RefreshSessions
             .FirstOrDefaultAsync(session => session.RefreshToken == refreshToken, cancellationToken);
         if (existingSession is null)
         {
-            var message = "Refresh session by refresh token was not found.";
-            var error = new ValidationException(new[]
-            {
-                new ValidationFailure(nameof(refreshToken),message)
-            });
-            return error;
+            return new InvalidRefreshToken("Session was not found.");
         }
 
         //delete refresh from database
@@ -65,6 +57,6 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Unit,Va
         _cookieProvider.DeleteJwtTokenFromCookies(_context.Response);
         _cookieProvider.DeleteRefreshTokenFromCookies(_context.Response);
         
-        return Unit.Value;
+        return new Success();
     }
 }

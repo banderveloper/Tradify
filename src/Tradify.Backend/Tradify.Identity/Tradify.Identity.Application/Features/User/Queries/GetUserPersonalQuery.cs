@@ -1,6 +1,7 @@
-﻿using LanguageExt.Common;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OneOf;
+using Tradify.Identity.Application.Common.MediatorResults;
 using Tradify.Identity.Application.Interfaces;
 
 namespace Tradify.Identity.Application.Features.User.Queries;
@@ -24,12 +25,12 @@ public class UserPersonalResponseModel
     public DateOnly BirthDate { get; set; }
 }
 
-public class GetUserPersonalQuery : IRequest<Result<UserPersonalResponseModel?>>
+public class GetUserPersonalQuery : IRequest<OneOf<UserPersonalResponseModel, UserNotFound>>
 {
     public int UserId { get; set; }
 }
 
-public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery, Result<UserPersonalResponseModel?>>
+public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery, OneOf<UserPersonalResponseModel,UserNotFound>>
 {
     private readonly IApplicationDbContext _dbContext;
 
@@ -38,7 +39,7 @@ public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery,
         _dbContext = dbContext;
     }
     
-    public async Task<Result<UserPersonalResponseModel?>> Handle(GetUserPersonalQuery request, CancellationToken cancellationToken)
+    public async Task<OneOf<UserPersonalResponseModel,UserNotFound>> Handle(GetUserPersonalQuery request, CancellationToken cancellationToken)
     {
         var userPersonalResponseModel = await _dbContext.Users
             .Where(u => u.Id == request.UserId)
@@ -63,6 +64,9 @@ public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery,
                 })
             .FirstOrDefaultAsync(cancellationToken);
 
+        if (userPersonalResponseModel is null)
+            return new UserNotFound("User with given id was not found.");
+        
         return userPersonalResponseModel;
     }
 }

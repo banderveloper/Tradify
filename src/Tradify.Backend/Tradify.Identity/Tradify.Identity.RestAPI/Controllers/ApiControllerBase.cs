@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using LanguageExt.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Tradify.Identity.Application.Common.Extensions;
 
 namespace Tradify.Identity.RestAPI.Controllers;
 

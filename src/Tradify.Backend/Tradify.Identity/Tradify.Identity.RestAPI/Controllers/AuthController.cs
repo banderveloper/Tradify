@@ -18,16 +18,20 @@ public class AuthController : ApiControllerBase
 
         var result = await Mediator.Send(request);
         return result.Match<IActionResult>(
-            output => Ok(),
-            ex => NotFound(ex.ToProblemDetails()));
+            success => Ok(),
+            invalidCredentials => Unauthorized());
     }
 
     [HttpPut("refresh")]
     public async Task<IActionResult> Refresh()
     {
         var request = new RefreshCommand();
-        
-        return 
+
+        var result = await Mediator.Send(request);
+        return result.Match<IActionResult>(
+            success => Ok(),
+            invalidRefreshToken => Unauthorized(),
+            userNotFound => Unauthorized());
     }
 
     [HttpDelete("logout")]
@@ -38,6 +42,6 @@ public class AuthController : ApiControllerBase
         var result = await Mediator.Send(request);
         return result.Match<IActionResult>(
             output => Ok(),
-            ex => NotFound(ex.ToProblemDetails()));
+            invalidRefreshToken => Unauthorized());
     }
 }
