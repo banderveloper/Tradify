@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tradify.Chat.Application\Tradify.Chat.Application.csproj" />
+      <ProjectReference Include="..\Tradify.Chat.Domain\Tradify.Chat.Domain.csproj" />
+      <ProjectReference Include="..\Tradify.Chat.Persistence\Tradify.Chat.Persistence.csproj" />
+    </ItemGroup>
+
+</Project>
