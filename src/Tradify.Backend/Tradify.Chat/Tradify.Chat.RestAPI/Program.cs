@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Tradify.Chat.Application;
 using Tradify.Chat.Application.Configurations;
+using Tradify.Chat.Application.Converters;
+using Tradify.Chat.Application.Features;
 using Tradify.Chat.Application.Mappings;
 using Tradify.Chat.Persistence;
 using Tradify.Chat.RestAPI.Middleware;
@@ -52,7 +54,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
 
         // ErrorCode enum to snake_case string converter
-        //options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<ErrorCode>());
+        options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<ErrorCode>());
     });
 
 // Swagger

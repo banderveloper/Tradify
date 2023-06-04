@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{44E00EB2-C931-4A4D-ACE6-344702FA35C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{869D67A0-5DC7-4454-91D6-3A62FEB026F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{C8E30DBC-B52E-4E30-8896-D17DFC54486C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradify.Chat.Domain", "Tradify.Chat.Domain\Tradify.Chat.Domain.csproj", "{0A54237D-4242-4036-9D3A-3A8A5B2C7661}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradify.Chat.Application", "Tradify.Chat.Application\Tradify.Chat.Application.csproj", "{AB4F388B-453E-4238-A4B1-F835BD0267A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradify.Chat.Persistence", "Tradify.Chat.Persistence\Tradify.Chat.Persistence.csproj", "{469FB472-877C-4AF8-983C-A653CF19D972}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradify.Chat.RestAPI", "Tradify.Chat.RestAPI\Tradify.Chat.RestAPI.csproj", "{4D804489-88E2-437B-A8A6-2E2753CAD9F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0A54237D-4242-4036-9D3A-3A8A5B2C7661} = {44E00EB2-C931-4A4D-ACE6-344702FA35C5}
+		{AB4F388B-453E-4238-A4B1-F835BD0267A3} = {44E00EB2-C931-4A4D-ACE6-344702FA35C5}
+		{469FB472-877C-4AF8-983C-A653CF19D972} = {869D67A0-5DC7-4454-91D6-3A62FEB026F6}
+		{4D804489-88E2-437B-A8A6-2E2753CAD9F1} = {C8E30DBC-B52E-4E30-8896-D17DFC54486C}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0A54237D-4242-4036-9D3A-3A8A5B2C7661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A54237D-4242-4036-9D3A-3A8A5B2C7661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A54237D-4242-4036-9D3A-3A8A5B2C7661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A54237D-4242-4036-9D3A-3A8A5B2C7661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB4F388B-453E-4238-A4B1-F835BD0267A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB4F388B-453E-4238-A4B1-F835BD0267A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB4F388B-453E-4238-A4B1-F835BD0267A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB4F388B-453E-4238-A4B1-F835BD0267A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{469FB472-877C-4AF8-983C-A653CF19D972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{469FB472-877C-4AF8-983C-A653CF19D972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{469FB472-877C-4AF8-983C-A653CF19D972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{469FB472-877C-4AF8-983C-A653CF19D972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D804489-88E2-437B-A8A6-2E2753CAD9F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D804489-88E2-437B-A8A6-2E2753CAD9F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D804489-88E2-437B-A8A6-2E2753CAD9F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D804489-88E2-437B-A8A6-2E2753CAD9F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

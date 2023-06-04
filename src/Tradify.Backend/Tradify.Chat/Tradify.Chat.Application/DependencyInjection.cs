@@ -1,6 +1,16 @@
-﻿namespace Tradify.Chat.Application;
+﻿using System.Reflection;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
-public class DependencyInjection
+namespace Tradify.Chat.Application;
+
+public static class DependencyInjection
 {
-    
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        services.AddMediatR(config => 
+            config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+        
+        return services;
+    }
 }
