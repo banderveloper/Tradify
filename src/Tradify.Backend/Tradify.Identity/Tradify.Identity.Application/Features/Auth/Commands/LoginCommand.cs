@@ -13,13 +13,13 @@ using Tradify.Identity.Domain.Entities;
 namespace Tradify.Identity.Application.Features.Auth.Commands;
 
 
-public class LoginCommand : IRequest<OneOf<Success, InvalidCredentials>>
+public class LoginCommand : IRequest<OneOf<Success, InvalidData>>
 {
     public string UserName { get; set; }
     public string Password { get; set; }
 }
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Success, InvalidCredentials>>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Success, InvalidData>>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly JwtProvider _jwtProvider;
@@ -38,14 +38,14 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Success, 
         _cookieProvider = cookieProvider;
     }
     
-    public async Task<OneOf<Success, InvalidCredentials>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<OneOf<Success, InvalidData>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.UserName == request.UserName, cancellationToken);
         if (user is null ||
             !BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.PasswordHash, HashType.SHA512))
         {
-            return new InvalidCredentials("Incorrect username or/and password.");
+            return new InvalidData("Incorrect username or/and password.", ErrorCode.InvalidCredentials);
         }
 
         //finding existing session by user id

@@ -25,12 +25,12 @@ public class UserPersonalResponseModel
     public DateOnly BirthDate { get; set; }
 }
 
-public class GetUserPersonalQuery : IRequest<OneOf<UserPersonalResponseModel, UserNotFound>>
+public class GetUserPersonalQuery : IRequest<OneOf<UserPersonalResponseModel, NotFound>>
 {
-    public int UserId { get; set; }
+    public long UserId { get; set; }
 }
 
-public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery, OneOf<UserPersonalResponseModel,UserNotFound>>
+public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery, OneOf<UserPersonalResponseModel,NotFound>>
 {
     private readonly IApplicationDbContext _dbContext;
 
@@ -39,7 +39,7 @@ public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery,
         _dbContext = dbContext;
     }
     
-    public async Task<OneOf<UserPersonalResponseModel,UserNotFound>> Handle(GetUserPersonalQuery request, CancellationToken cancellationToken)
+    public async Task<OneOf<UserPersonalResponseModel,NotFound>> Handle(GetUserPersonalQuery request, CancellationToken cancellationToken)
     {
         var userPersonalResponseModel = await _dbContext.Users
             .Where(u => u.Id == request.UserId)
@@ -65,7 +65,7 @@ public class GetUserPersonalQueryHandler : IRequestHandler<GetUserPersonalQuery,
             .FirstOrDefaultAsync(cancellationToken);
 
         if (userPersonalResponseModel is null)
-            return new UserNotFound("User with given id was not found.");
+            return new NotFound("User with given id was not found.", ErrorCode.UserNotFound);
         
         return userPersonalResponseModel;
     }

@@ -3,10 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Tradify.Identity.Application.Common.MediatorResults;
 
-public record struct InvalidCredentials(string Message);
+public enum ErrorCode
+{
+    InvalidCredentials,
+    InvalidRefreshToken,
+    UserAlreadyExists,
+    UserNotFound,
+}
 
-public record struct InvalidRefreshToken(string Message);
+public record struct InvalidData(string Message, ErrorCode ErrorCode);
 
-public record struct UserNotFound(string Message);
+public record struct NotFound(string Message, ErrorCode ErrorCode);
 
-public record struct UserAlreadyExists(string Message);
+public record struct AlreadyExists(string Message, ErrorCode ErrorCode);

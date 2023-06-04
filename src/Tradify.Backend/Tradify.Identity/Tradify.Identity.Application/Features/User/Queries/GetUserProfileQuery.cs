@@ -19,19 +19,19 @@ public class UserProfileResponseModel
     public string? Phone { get; set; }
 }
 
-public class GetUserProfileQuery : IRequest<OneOf<UserProfileResponseModel, UserNotFound>>
+public class GetUserProfileQuery : IRequest<OneOf<UserProfileResponseModel, NotFound>>
 {
-    public int UserId { get; set; }
+    public long UserId { get; set; }
 }
 
-public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, OneOf<UserProfileResponseModel, UserNotFound>>
+public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, OneOf<UserProfileResponseModel, NotFound>>
 {
     private readonly IApplicationDbContext _dbContext;
 
     public GetUserProfileQueryHandler(IApplicationDbContext dbContext) =>
         _dbContext = dbContext;
 
-        public async Task<OneOf<UserProfileResponseModel, UserNotFound>> Handle(
+        public async Task<OneOf<UserProfileResponseModel, NotFound>> Handle(
         GetUserProfileQuery request,
         CancellationToken cancellationToken)
     {
@@ -54,7 +54,7 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, O
             .FirstOrDefaultAsync(cancellationToken);
 
         if (userProfileResponseModel is null)
-            return new UserNotFound("User with given id was not found.");
+            return new NotFound("User with given id was not found.", ErrorCode.UserNotFound);
         
         return userProfileResponseModel;
     }

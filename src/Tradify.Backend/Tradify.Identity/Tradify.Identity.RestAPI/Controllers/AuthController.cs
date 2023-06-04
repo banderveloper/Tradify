@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Tradify.Identity.Application.Common.Extensions;
+using Tradify.Identity.Application.Common.MediatorResults;
 using Tradify.Identity.Application.Features.Auth.Commands;
 using Tradify.Identity.RestAPI.Models;
 
@@ -26,12 +27,12 @@ public class AuthController : ApiControllerBase
     public async Task<IActionResult> Refresh()
     {
         var request = new RefreshCommand();
-
         var result = await Mediator.Send(request);
         return result.Match<IActionResult>(
             success => Ok(),
-            invalidRefreshToken => Unauthorized(),
-            userNotFound => Unauthorized());
+            invalidRefreshToken => Unauthorized(invalidRefreshToken),
+            userNotFound => Unauthorized(userNotFound));
+        
     }
 
     [HttpDelete("logout")]

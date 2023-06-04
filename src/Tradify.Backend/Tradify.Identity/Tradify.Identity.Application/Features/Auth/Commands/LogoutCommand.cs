@@ -12,9 +12,9 @@ using Tradify.Identity.Application.Common.MediatorResults;
 
 namespace Tradify.Identity.Application.Features.Auth.Commands;
 
-public class LogoutCommand : IRequest<OneOf<Success,InvalidRefreshToken>> {}
+public class LogoutCommand : IRequest<OneOf<Success,InvalidData>> {}
 
-public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Success,InvalidRefreshToken>>
+public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Success,InvalidData>>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly JwtProvider _jwtProvider;
@@ -33,19 +33,19 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Success
         _cookieProvider = cookieProvider;
     }
     
-    public async Task<OneOf<Success,InvalidRefreshToken>> Handle(LogoutCommand request, CancellationToken cancellationToken)
+    public async Task<OneOf<Success,InvalidData>> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = _cookieProvider.GetRefreshTokenFromCookie(_context.Request);
         if (refreshToken is null)
         {
-            return new InvalidRefreshToken("Unable to extract refresh token from cookies.");
+            return new InvalidData("Unable to extract refresh token from cookies.", ErrorCode.InvalidRefreshToken);
         }
 
         var existingSession = await _dbContext.RefreshSessions
             .FirstOrDefaultAsync(session => session.RefreshToken == refreshToken, cancellationToken);
         if (existingSession is null)
         {
-            return new InvalidRefreshToken("Session was not found.");
+            return new InvalidData("Session was not found.", ErrorCode.InvalidRefreshToken);
         }
 
         //delete refresh from database

@@ -11,7 +11,7 @@ using Tradify.Identity.Application.Interfaces;
 
 namespace Tradify.Identity.Application.Features.User.Commands;
 
-public class RegisterCommand : IRequest<OneOf<Success, UserAlreadyExists, ValidationResult>>
+public class RegisterCommand : IRequest<OneOf<Success, AlreadyExists, ValidationResult>>
 {
     public string UserName { get; set; }
     public string Password { get; set; }
@@ -26,7 +26,7 @@ public class RegisterCommand : IRequest<OneOf<Success, UserAlreadyExists, Valida
     public DateOnly BirthDate { get; set; }
 }
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, OneOf<Success, UserAlreadyExists, ValidationResult>>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, OneOf<Success, AlreadyExists, ValidationResult>>
 {
     private readonly IApplicationDbContext _dbContext;
 
@@ -35,17 +35,16 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, OneOf<Suc
         _dbContext = dbContext;
     }
     
-    public async Task<OneOf<Success, UserAlreadyExists, ValidationResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<OneOf<Success, AlreadyExists, ValidationResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        List<ValidationFailure>? failures = null;
         if (await _dbContext.Users.AnyAsync(u=>u.UserName == request.UserName, cancellationToken))
         {
-            return new UserAlreadyExists("User with given user name already exists.");
+            return new AlreadyExists("User with given user name already exists.", ErrorCode.UserAlreadyExists);
         }
         
         if (await _dbContext.Users.AnyAsync(u=>u.Email == request.Email, cancellationToken))
         {
-            return new UserAlreadyExists("User with given email already exists.");
+            return new AlreadyExists("User with given email already exists.", ErrorCode.UserAlreadyExists);
         }
 
         var user = new Domain.Entities.User()
