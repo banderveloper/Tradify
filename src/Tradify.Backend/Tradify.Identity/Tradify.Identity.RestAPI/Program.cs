@@ -1,12 +1,14 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Tradify.Identity.Application;
 using Tradify.Identity.Application.Common.Converters;
 using Tradify.Identity.Application.Common.Mappings;
 using Tradify.Identity.Application.Interfaces;
+using Tradify.Identity.Application.RabbitMq.Consumers;
 using Tradify.Identity.Domain.Enums;
 using Tradify.Identity.Persistence;
 using Tradify.Identity.RestAPI;
@@ -33,6 +35,24 @@ builder.Services.AddAuthentication(config =>
             JwtBearerDefaults.AuthenticationScheme;
     })
     .AddJwtBearer();
+
+//Configure mass transit
+builder.Services.AddMassTransit(config =>
+{
+    config.AddConsumer<GetUsersSummariesConsumer>();
+    config.UsingRabbitMq((ctx,cfg) =>
+    {
+        cfg.Host(new Uri("rabbitmq://localhost"), h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ReceiveEndpoint("get-users-summaries-queue", c =>
+        {
+            c.ConfigureConsumer<GetUsersSummariesConsumer>(ctx);
+        });
+    });
+});
 
 //DI for layers
 builder.Services.AddApplication();

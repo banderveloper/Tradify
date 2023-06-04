@@ -23,19 +23,19 @@ public class UserController : ApiControllerBase
             validationResult => BadRequest(validationResult.ToProblemDetails()));
     }
 
-    [HttpGet("public/{usersIds}")]
-    public async Task<IActionResult> GetUsersByIds([FromRoute] IEnumerable<long> usersIds)
-    {
-        var request = new GetUsersSummariesQuery()
-        {
-            UsersIds = usersIds
-        };
-
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(success.Value),
-            userNotFound => NotFound(userNotFound));
-    }
+    // [HttpGet("public/{usersIds}")]
+    // public async Task<IActionResult> GetUsersByIds([FromRoute] IEnumerable<long> usersIds)
+    // {
+    //     var request = new GetUsersSummariesQuery()
+    //     {
+    //         UsersIds = usersIds
+    //     };
+    //
+    //     var result = await Mediator.Send(request);
+    //     return result.Match<IActionResult>(
+    //         success => Ok(success.Value),
+    //         userNotFound => NotFound(userNotFound));
+    // }
     
     [HttpGet("public/{userId:int}")]
     public async Task<IActionResult> GetUserProfileById([FromRoute] long userId)

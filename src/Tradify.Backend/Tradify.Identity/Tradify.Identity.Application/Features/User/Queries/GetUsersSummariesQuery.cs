@@ -29,7 +29,7 @@ public class GetUsersSummariesQueryHandler : IRequestHandler<GetUsersSummariesQu
         
     public async Task<OneOf<
             Success<IEnumerable<UserSummaryResponseModel>>, 
-            NotFound>> 
+            NotFound>>
         Handle(GetUsersSummariesQuery request, CancellationToken cancellationToken)
     {
         var usersSummariesResponseModels = await _dbContext

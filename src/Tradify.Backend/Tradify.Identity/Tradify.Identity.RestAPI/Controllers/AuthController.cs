@@ -32,7 +32,6 @@ public class AuthController : ApiControllerBase
             success => Ok(),
             invalidRefreshToken => Unauthorized(invalidRefreshToken),
             userNotFound => Unauthorized(userNotFound));
-        
     }
 
     [HttpDelete("logout")]
