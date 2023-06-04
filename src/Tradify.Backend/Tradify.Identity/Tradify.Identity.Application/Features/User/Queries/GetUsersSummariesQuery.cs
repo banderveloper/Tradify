@@ -15,21 +15,19 @@ public class UserSummaryResponseModel
     public string UserName { get; set; }
 }
 
-public class GetUsersSummariesQuery : IRequest<OneOf<Success<IEnumerable<UserSummaryResponseModel>>,NotFound>>
+public class GetUsersSummariesQuery : IRequest<IEnumerable<UserSummaryResponseModel>>
 {
     public IEnumerable<long> UsersIds { get; set; }
 }
 
-public class GetUsersSummariesQueryHandler : IRequestHandler<GetUsersSummariesQuery, OneOf<Success<IEnumerable<UserSummaryResponseModel>>,NotFound>>
+public class GetUsersSummariesQueryHandler : IRequestHandler<GetUsersSummariesQuery, IEnumerable<UserSummaryResponseModel>>
 {
     private readonly IApplicationDbContext _dbContext;
 
     public GetUsersSummariesQueryHandler(IApplicationDbContext dbContext) =>
         (_dbContext) = (dbContext);
         
-    public async Task<OneOf<
-            Success<IEnumerable<UserSummaryResponseModel>>, 
-            NotFound>>
+    public async Task<IEnumerable<UserSummaryResponseModel>>
         Handle(GetUsersSummariesQuery request, CancellationToken cancellationToken)
     {
         var usersSummariesResponseModels = await _dbContext
@@ -45,9 +43,8 @@ public class GetUsersSummariesQueryHandler : IRequestHandler<GetUsersSummariesQu
                 })
             .ToListAsync(cancellationToken);
 
-        if (usersSummariesResponseModels is null)
-            return new NotFound("Users with given ids were not found", ErrorCode.UserNotFound);
+        
 
-        return new Success<IEnumerable<UserSummaryResponseModel>>(usersSummariesResponseModels);
+        return (usersSummariesResponseModels);
     }
 }
